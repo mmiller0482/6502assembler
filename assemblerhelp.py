@@ -1,3 +1,3 @@
 ARGHELP = """
-Usage: assembler6502.py <inputfile>
+Usage: assembler6502.py <inputfile> <outputfile>
 """

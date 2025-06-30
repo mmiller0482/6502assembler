@@ -8,7 +8,7 @@ class Assembler6502: ...
 
 
 def main(args: List[str]):
-    if len(args) != 1:
+    if len(args) != 2:
         raise Assembler6502LoadError("Invalid number of arguments")
     filename = args[0]
 
