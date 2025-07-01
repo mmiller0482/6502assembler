@@ -5,7 +5,12 @@ from lib.token_type import TokenType
 
 @dataclass
 class AsmToken:
+    # Shares most with the RawStrToken class
     token_type: TokenType
+    line: int
+    col: int
+    value: str = ""
+
 
 @dataclass
 class RawStrToken:
@@ -14,4 +19,6 @@ class RawStrToken:
 
     # col where the first character of the token appears.
     col: int
+
+    # literal string value of the token
     value: str
