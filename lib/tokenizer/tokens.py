@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from lib.token_type import TokenType
+from lib.tokenizer.token_type import TokenType
 
 
 @dataclass

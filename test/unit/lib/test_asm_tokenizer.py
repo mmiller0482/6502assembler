@@ -1,7 +1,7 @@
 import pytest
 
-from lib.asm_tokenizer import AsmTokenizer, _AsmTokenizer
-from lib.tokens import RawStrToken
+from lib.tokenizer.asm_raw_tokenizer import _AsmRawTokenizer
+from lib.tokenizer.tokens import RawStrToken
 
 # Note about the """ strings :
 # The beginning of the string starts immediately after the """.
@@ -14,7 +14,7 @@ from lib.tokens import RawStrToken
 # that the strings start on the 0th (first) line of ASM code.dd
 
 
-class Test_AsmTokenizer:
+class Test_AsmRawTokenizer:
     @pytest.mark.parametrize(
         "code, expected",
         [
@@ -26,19 +26,33 @@ class Test_AsmTokenizer:
                     RawStrToken(line=1, col=6, value="arg2"),
                 ],
             ),
-            # (
-            #    """
-            #    arg1 ;comment
-            #    arg2
-            #    """,
-            #    [
-            #        RawStrToken(line=1, col=0, value="arg1"),
-            #        RawStrToken(line=2, col=0, value="arg2"),
-            #    ],
-            # ),
+            (
+                """arg1 ;comment
+arg2
+                """,
+                [
+                    RawStrToken(line=1, col=1, value="arg1"),
+                    RawStrToken(line=2, col=1, value="arg2"),
+                ],
+            ),
+            (
+                "arg1;this is a comment",
+                [
+                    RawStrToken(line=1, col=1, value="arg1"),
+                ],
+            ),
+            (
+                "  arg1\n\targ2   arg3\narg4",
+                [
+                    RawStrToken(line=1, col=3, value="arg1"),
+                    RawStrToken(line=2, col=2, value="arg2"),
+                    RawStrToken(line=2, col=9, value="arg3"),
+                    RawStrToken(line=3, col=1, value="arg4"),
+                ],
+            ),
         ],
     )
-    def test_sanitize_to_raw_strings(self, code, expected):
-        tokenizer: _AsmTokenizer = _AsmTokenizer(code)
-        tokens = tokenizer.sanitize_to_raw_strings()
+    def test_tokenize(self, code, expected):
+        tokenizer: _AsmRawTokenizer = _AsmRawTokenizer(code)
+        tokens = tokenizer.tokenize()
         assert tokens == expected
